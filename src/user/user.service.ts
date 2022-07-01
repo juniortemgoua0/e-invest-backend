@@ -35,7 +35,6 @@ export class UserService {
     }
 
     async findOne(username: string) {
-        return (await this.userModel.findOne({email: username})) ||
-            (await this.userModel.findOne({phone_number: username}))
+        return  this.userModel.findOne({phone_number: username})
     }
 }

@@ -25,9 +25,7 @@ export class UpdateUserDto {
   @IsString()
   confirm_password: string;
 
-  @IsNotEmpty()
   @IsString()
   qr_code: string;
-
 
 }

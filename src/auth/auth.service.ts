@@ -42,19 +42,23 @@ export class AuthService {
     const salt = await bcrypt.genSalt()
     const hashPassword = await bcrypt.hash(signUpDto.password, salt);
 
-    const newUSer = await new this.userModel(result).save()
+    const newUSer = await new this.userModel({
+      ...result,
+      password: hashPassword
+    }).save()
 
     // generation de l'identifiant qr_code
     let qr_code = await bcrypt.hash(newUSer.phone_number + "-" + newUSer._id , salt)
 
     return this.userService.updateUser(newUSer._id , {
-      ...signUpDto,
+       ...signUpDto,
+      password:hashPassword,
       qr_code : qr_code
     } )
   }
 
   signIn(user: any) {
-    const payload = {role: user?.role, sub: user}
+    const payload = {role: user?._id, sub: user}
     return {
       access_token: this.jwtService.sign(payload)
     }
