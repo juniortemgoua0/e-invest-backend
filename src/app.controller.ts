@@ -1,0 +1,11 @@
+import {Controller, Get, Injectable} from "@nestjs/common";
+
+@Controller()
+export class AppController{
+  @Get('/')
+  getHello(){
+    return {
+      message : "Welcome to backend"
+    }
+  }
+}

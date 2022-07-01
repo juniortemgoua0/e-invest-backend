@@ -3,6 +3,7 @@ import {ConfigModule} from '@nestjs/config';
 import {AuthModule} from './auth/auth.module';
 import {MongooseModule} from "@nestjs/mongoose";
 import {UserModule} from './user/user.module';
+import {AppController} from "./app.controller";
 
 @Global()
 @Module({
@@ -13,6 +14,7 @@ import {UserModule} from './user/user.module';
         UserModule,
     ],
     exports: [ConfigModule],
+  controllers: [AppController]
 })
 export class AppModule {
 
