@@ -27,5 +27,4 @@ export class UpdateUserDto {
 
   @IsString()
   qr_code: string;
-
 }

@@ -33,7 +33,7 @@ export class AuthService {
       (await this.userModel.findOne({phone_number: signUpDto.phone_number}));
 
     if (checkUser) {
-      throw new HttpException("Mot de passe ou numero de telephone deja utiliser", HttpStatus.UNAUTHORIZED);
+      throw new HttpException("Ce numéro de téléphone est déja utilisé", HttpStatus.UNAUTHORIZED);
     }
     if (signUpDto.password !== confirm_password) {
       throw new HttpException("Les mot ne correspondent pas", HttpStatus.UNAUTHORIZED);
@@ -48,13 +48,14 @@ export class AuthService {
     }).save()
 
     // generation de l'identifiant qr_code
-    let qr_code = await bcrypt.hash(newUSer.phone_number + "-" + newUSer._id , salt)
+    let qr_code = await bcrypt.hash(newUSer.phone_number + "-" + newUSer._id, salt)
 
-    return this.userService.updateUser(newUSer._id , {
-       ...signUpDto,
-      password:hashPassword,
-      qr_code : qr_code
-    } )
+    return this.userService.updateUser(newUSer._id,
+      {
+        ...signUpDto,
+        password: hashPassword,
+        qr_code: qr_code
+      })
   }
 
   signIn(user: any) {

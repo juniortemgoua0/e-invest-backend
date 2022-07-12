@@ -15,7 +15,6 @@ export class SignUpDto {
   email: string;
 
   @IsNotEmpty()
-  @IsString()
   phone_number: string;
 
   @IsNotEmpty()
@@ -25,5 +24,4 @@ export class SignUpDto {
   @IsNotEmpty()
   @IsString()
   confirm_password: string;
-
 }

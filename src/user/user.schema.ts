@@ -1,5 +1,7 @@
 import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
 import mongoose, {Document} from "mongoose";
+import {ModelName} from "../helpers";
+import {Bet} from "../bet/schema/bet.schema";
 
 export type UserDocument = User & Document;
 
@@ -21,8 +23,11 @@ export class User {
   @Prop({required: true})
   password: string;
 
-  @Prop({required: false , default: ""})
+  @Prop({required: false, default: ""})
   qr_code: string;
+
+  @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: ModelName.BET}], default: []})
+  bets: Bet[];
 
 }
 
