@@ -14,7 +14,4 @@ export class CreatePaymentDto {
   @IsNotEmpty()
   payment_mode: string;
 
-  @IsString()
-  @IsNotEmpty()
-  user_id: string;
 }

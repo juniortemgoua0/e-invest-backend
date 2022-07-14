@@ -1,5 +1,6 @@
 export enum BetStatus {
 
-  PENDING = "En cours",
+  PENDING = "En attente",
+  IN_PROGRESS = "En cours",
   ENDED = "Terminer"
 }

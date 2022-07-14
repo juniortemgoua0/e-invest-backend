@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, Put} from '@nestjs/common';
 import {BetService} from './bet.service';
 import {CreateBetDto} from './dto/create-bet.dto';
 import {UpdateBetDto} from './dto/update-bet.dto';
@@ -9,24 +9,37 @@ export class BetController {
   constructor(private readonly betService: BetService) {
   }
 
-  @Post()
-  create(@Body() createBetDto: CreateBetDto): Promise<Bet> {
-    return this.betService.create(createBetDto);
+  @Post(":userId")
+  create(
+    @Param('userId') userId : string,
+    @Body() createBetDto: CreateBetDto
+  ): Promise<Bet> {
+    return this.betService.create(userId , createBetDto);
   }
 
-  @Get()
-  findAll(): Promise<Bet[]> {
-    return this.betService.findAll();
+  @Get('check-bet/:userId')
+  checkExistingBet(@Param('userId') userId : string){
+    return this.betService.checkExistingBet(userId)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.betService.findOne(+id);
+  @Get(':userId')
+  findAll(
+    @Param('userId') userId : string,
+  ): Promise<Bet[]> {
+    return this.betService.findAll(userId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBetDto: UpdateBetDto) {
-    return this.betService.update(+id, updateBetDto);
+  @Get('current-bet/:userId')
+  findCurrentBet(@Param('userId') userId: string) : Promise<Bet | null> {
+    return this.betService.findCurrentBet(userId);
+  }
+
+  @Put(':userId')
+  updateBet(
+    @Param('userId') userId: string,
+    @Body() updateBetDto: UpdateBetDto
+  ) {
+    return this.betService.update(userId, updateBetDto);
   }
 
   @Delete(':id')

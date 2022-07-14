@@ -30,7 +30,7 @@ export class Bet {
   @Prop({required: false})
   end_of_bet: Date;
 
-  @Prop({required: true ,default: BetStatus.PENDING })
+  @Prop({required: true ,default: BetStatus.IN_PROGRESS })
   status: string;
 
   @Prop({required: true})
