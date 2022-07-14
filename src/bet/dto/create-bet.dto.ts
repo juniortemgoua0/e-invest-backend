@@ -21,7 +21,4 @@ export class CreateBetDto {
 
   @Prop({required: true})
   payment_reference: string;
-
-  @IsString()
-  user_id: string;
 }
