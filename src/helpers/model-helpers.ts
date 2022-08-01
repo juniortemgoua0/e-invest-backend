@@ -1,5 +1,6 @@
 export enum ModelName {
-  USER = "User",
-  BET = "bet",
-  PAYMENT = "payment"
+  USER = 'User',
+  BET = 'Bet',
+  PAYMENT = 'Payment',
+  SETTING = 'Setting',
 }

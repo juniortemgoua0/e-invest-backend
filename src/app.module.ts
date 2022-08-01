@@ -1,25 +1,37 @@
-import {Global, Module} from '@nestjs/common';
-import {ConfigModule} from '@nestjs/config';
-import {AuthModule} from './auth/auth.module';
-import {MongooseModule} from "@nestjs/mongoose";
-import {UserModule} from './user/user.module';
-import {AppController} from "./app.controller";
+import { Global, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
+import { UserModule } from './user/user.module';
+import { AppController } from './app.controller';
 import { BetModule } from './bet/bet.module';
 import { PaymentModule } from './payment/payment.module';
+import { SettingModule } from './setting/setting.module';
 
 @Global()
 @Module({
-    imports: [
-        ConfigModule.forRoot({isGlobal: true}),
-        MongooseModule.forRoot(process.env.MONGO_DB_URI),
-        AuthModule,
-        UserModule,
-        BetModule,
-        PaymentModule,
-    ],
-    exports: [ConfigModule],
-  controllers: [AppController]
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: '../.env',
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (
+        configService: ConfigService,
+      ): MongooseModuleFactoryOptions => {
+        return {
+          uri: configService.get<string>('MONGO_DB_URI'),
+        };
+      },
+      inject: [ConfigService],
+    }),
+    AuthModule,
+    UserModule,
+    BetModule,
+    PaymentModule,
+    SettingModule,
+  ],
+  exports: [ConfigModule],
+  controllers: [AppController],
 })
-export class AppModule {
-
-}
+export class AppModule {}
