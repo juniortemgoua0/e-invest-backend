@@ -1,7 +1,6 @@
-import {IsInt, IsNotEmpty, IsString, MinLength} from "class-validator";
+import { IsInt, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class SignUpDto {
-
   @IsNotEmpty()
   @IsString()
   first_name: string;

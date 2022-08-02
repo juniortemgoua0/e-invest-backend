@@ -30,7 +30,7 @@ export class BetService {
       .findOne({ user: userId })
       .where({ status: BetStatus.IN_PROGRESS });
     if (!currentBet) {
-      console.log(currentBet);
+      console.log('currentBet => ', currentBet);
       throw new HttpException(
         "Vous n'avez pas de mise en cours",
         HttpStatus.UNAUTHORIZED,
