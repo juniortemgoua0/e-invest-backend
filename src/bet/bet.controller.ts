@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from '@nestjs/common';
 import { BetService } from './bet.service';
 import { CreateBetDto } from './dto/create-bet.dto';
@@ -24,9 +25,20 @@ export class BetController {
     return this.betService.create(userId, createBetDto);
   }
 
+  @Get('')
+  getAllUsers(@Query('status') status: string) {
+    console.log(status);
+    return this.betService.getAllUsers(status);
+  }
+
   @Get('check-bet/:userId')
   checkExistingBet(@Param('userId') userId: string) {
     return this.betService.checkExistingBet(userId);
+  }
+
+  @Get('allTotal')
+  getAllTotalOfBet() {
+    return this.betService.getAllTotalOfBet();
   }
 
   @Get(':userId')

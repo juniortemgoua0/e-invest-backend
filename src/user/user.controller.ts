@@ -1,14 +1,29 @@
-import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto';
+import { GetUsersDto } from './dto/getUsers.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('')
-  getAllUsers() {
-    return this.userService.getAllUsers();
+  getAllUsers(@Query('status') status: string) {
+    console.log(status);
+    return this.userService.getAllUsers(status);
+  }
+
+  @Get('usersHaveBet')
+  getUserHaveRecentBet() {
+    return this.userService.getUserHaveRecentBet();
   }
 
   @Get(':userId')

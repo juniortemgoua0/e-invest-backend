@@ -11,16 +11,16 @@ export class Bet {
   @Prop({ required: true })
   bet_amount: number;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: 0 })
   balance_amount: number;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: 0 })
   available_amount: number;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: 0 })
   retained_amount: number;
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: 0 })
   active_duration: number;
 
   @Prop({ required: true, default: new Date() })

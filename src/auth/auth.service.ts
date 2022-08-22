@@ -6,7 +6,7 @@ import { UserDocument } from '../user/user.schema';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { ModelName } from '../helpers';
+import { ModelName, Role } from '../helpers';
 
 export enum UserStatusType {
   USER = 'user',
@@ -26,9 +26,9 @@ export class AuthService {
   async signUp(signUpDto: SignUpDto) {
     const { confirm_password, ...result } = signUpDto;
 
-    const checkUser =
-      (await this.userModel.findOne({ email: signUpDto.email })) ||
-      (await this.userModel.findOne({ phone_number: signUpDto.phone_number }));
+    const checkUser = await this.userModel.findOne({
+      phone_number: signUpDto.phone_number,
+    });
 
     if (checkUser) {
       throw new HttpException(
@@ -65,10 +65,11 @@ export class AuthService {
   }
 
   signIn(user: any) {
-    const payload = { role: user?._id, sub: user };
+    const payload = { role: user?.role, sub: user };
     return {
       access_token: this.jwtService.sign(payload),
       id: user?._id,
+      role: user['role'] ? user['role'] : Role.USER,
     };
   }
 
