@@ -1,7 +1,6 @@
-import {Bet} from "../../bet/types/bet.interface";
+import { Bet } from '../../bet/types/bet.interface';
 
 export interface User {
-
   id: string;
 
   first_name: string;
@@ -18,4 +17,5 @@ export interface User {
 
   bets: Bet[];
 
+  role: string;
 }

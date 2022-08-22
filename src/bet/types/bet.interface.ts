@@ -1,6 +1,6 @@
-import {User} from "../../user/types/user.interface";
+import { User } from '../../user/types/user.interface';
 
-export interface Bet{
+export interface Bet {
   id: string;
 
   bet_amount: number;

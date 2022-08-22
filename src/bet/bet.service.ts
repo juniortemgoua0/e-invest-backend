@@ -6,11 +6,16 @@ import { ModelName } from '../helpers';
 import { Model } from 'mongoose';
 import { Bet, BetDocument } from './schema/bet.schema';
 import { BetStatus } from '../helpers/enums';
+import { TotalAmount } from './types/total-amount';
+import { GetUsersStatus } from '../helpers/enums/get-users-status.enum';
+import { UserDocument } from '../user/user.schema';
 
 @Injectable()
 export class BetService {
   constructor(
     @InjectModel(ModelName.BET) private readonly betModel: Model<BetDocument>,
+    @InjectModel(ModelName.USER)
+    private readonly userModel: Model<UserDocument>,
   ) {}
 
   async create(userId: string, createBetDto: CreateBetDto): Promise<Bet> {
@@ -18,6 +23,9 @@ export class BetService {
       ...createBetDto,
       user: userId,
     });
+
+    await this.userModel.findByIdAndUpdate(userId, { $push: { bets: newBet } });
+
     return (await newBet.save()).populate(['user']);
   }
 
@@ -62,5 +70,47 @@ export class BetService {
       msg: 'done',
       status: 200,
     };
+  }
+
+  async getAllUsers(status: string) {
+    if (status !== undefined)
+      switch (status) {
+        case GetUsersStatus.ALL:
+          return this.betModel.find();
+        case GetUsersStatus.IN_LINE:
+          let users = [];
+          users = await this.betModel
+            .find()
+            .where('status')
+            .equals(BetStatus.IN_PROGRESS);
+          return users;
+        default:
+          return this.betModel.find();
+      }
+    else {
+      return this.betModel.find();
+    }
+  }
+
+  async getAllTotalOfBet(): Promise<TotalAmount> {
+    const allBets: any = await this.betModel.find();
+
+    const total: TotalAmount = {
+      available: 0,
+      retained: 0,
+      balance: 0,
+      bet: 0,
+      lastBetAmount: 0,
+    };
+
+    for (const bet of allBets) {
+      total.available += bet?.available_amount;
+      total.retained += bet?.retained_amount;
+      total.balance += bet?.balance_amount;
+      total.bet += bet?.bet_amount;
+    }
+    total.lastBetAmount = allBets[allBets.length - 1].bet_amount;
+
+    return total;
   }
 }

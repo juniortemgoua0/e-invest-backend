@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { BetModule } from './bet/bet.module';
 import { PaymentModule } from './payment/payment.module';
 import { SettingModule } from './setting/setting.module';
+import { AdminModule } from './admin/admin.module';
 
 @Global()
 @Module({
@@ -30,6 +31,7 @@ import { SettingModule } from './setting/setting.module';
     BetModule,
     PaymentModule,
     SettingModule,
+    AdminModule,
   ],
   exports: [ConfigModule],
   controllers: [AppController],
