@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { BetService } from './bet.service';
 import { CreateBetDto } from './dto/create-bet.dto';
@@ -25,10 +26,18 @@ export class BetController {
     return this.betService.create(userId, createBetDto);
   }
 
-  @Get('')
-  getAllUsers(@Query('status') status: string) {
-    console.log(status);
-    return this.betService.getAllUsers(status);
+  @Get()
+  getBets(
+    @Query('pageIndex', ParseIntPipe) pageIndex: number,
+    @Query('pageSize', ParseIntPipe) pageSize: number,
+    @Query('status') status: string,
+  ) {
+    return this.betService.getBets(pageIndex, pageSize, status);
+  }
+
+  @Get('totalItems')
+  getTotalBetItems() {
+    return this.betService.getTotalBetItems();
   }
 
   @Get('check-bet/:userId')

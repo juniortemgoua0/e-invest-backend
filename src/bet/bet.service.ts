@@ -72,11 +72,24 @@ export class BetService {
     };
   }
 
-  async getAllUsers(status: string) {
+  async getBets(pageIndex: number, pageSize: number, status: string) {
+    const skip = pageSize * ((pageIndex || 1) - 1);
+    const limit = pageSize || 25;
+    const foundCollections = [];
+
+    const collections = await this.betModel
+      .find()
+      .skip(skip)
+      .limit(limit)
+      .sort('-createdAt');
+    for (const col of collections) {
+      foundCollections.push((await col.populate(['user']))['_doc']);
+    }
+
     if (status !== undefined)
       switch (status) {
         case GetUsersStatus.ALL:
-          return this.betModel.find();
+          return foundCollections;
         case GetUsersStatus.IN_LINE:
           let users = [];
           users = await this.betModel
@@ -112,5 +125,10 @@ export class BetService {
     total.lastBetAmount = allBets[allBets.length - 1].bet_amount;
 
     return total;
+  }
+
+  async getTotalBetItems() {
+    const allBets: any = await this.betModel.find();
+    return allBets.length;
   }
 }
