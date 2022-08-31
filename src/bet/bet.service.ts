@@ -131,4 +131,24 @@ export class BetService {
     const allBets: any = await this.betModel.find();
     return allBets.length;
   }
+
+  async getAllTotalOfBetOfUser(userId: string) {
+    const allBets: any = await this.betModel.find({ user: userId });
+
+    const total: TotalAmount = {
+      available: 0,
+      retained: 0,
+      balance: 0,
+      bet: 0,
+    };
+
+    for (const bet of allBets) {
+      total.available += bet?.available_amount;
+      total.retained += bet?.retained_amount;
+      total.balance += bet?.balance_amount;
+      total.bet += bet?.bet_amount;
+    }
+    total.gains = total.available - total.bet;
+    return total;
+  }
 }

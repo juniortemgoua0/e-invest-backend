@@ -50,6 +50,11 @@ export class BetController {
     return this.betService.getAllTotalOfBet();
   }
 
+  @Get('allTotal/:userId')
+  getAllTotalOfBetOfUser(@Param('userId') userId: string) {
+    return this.betService.getAllTotalOfBetOfUser(userId);
+  }
+
   @Get(':userId')
   findAll(@Param('userId') userId: string): Promise<Bet[]> {
     return this.betService.findAll(userId);
