@@ -3,6 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import { ModelName } from '../helpers';
 import { Bet } from '../bet/schema/bet.schema';
 import { Role } from '../helpers/role';
+import { Withdraw } from '../withdraw/withdraw.schema';
 
 export type UserDocument = User & Document;
 
@@ -34,6 +35,22 @@ export class User {
 
   @Prop({ required: true, default: Role.USER })
   role: string;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: ModelName.WITHDRAW,
+  })
+  withdraw: Withdraw;
+
+  @Prop({
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: ModelName.WITHDRAW,
+      },
+    ],
+  })
+  withdraws: Withdraw[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

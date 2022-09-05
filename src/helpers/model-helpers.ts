@@ -3,4 +3,5 @@ export enum ModelName {
   BET = 'Bet',
   PAYMENT = 'Payment',
   SETTING = 'Setting',
+  WITHDRAW = 'Withdraw',
 }

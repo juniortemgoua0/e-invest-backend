@@ -4,9 +4,7 @@ import { Model } from 'mongoose';
 import { UserDocument } from './user.schema';
 import { UpdateUserDto } from './dto';
 import { ModelName } from '../helpers';
-import { GetUsersDto } from './dto/getUsers.dto';
 import { GetUsersStatus } from '../helpers/enums/get-users-status.enum';
-import { BetStatus } from '../helpers/enums';
 
 @Injectable()
 export class UserService {
@@ -23,7 +21,11 @@ export class UserService {
         case GetUsersStatus.IN_LINE:
           let users = [];
 
-          users = (await this.userModel.find().populate(['bets']))['_doc'];
+          users = (
+            await this.userModel
+              .find()
+              .populate(['bets', 'withdraw', 'withdraws'])
+          )['_doc'];
 
           for (const user of users) {
             if (user?.bets && user?.bets.length > 0) {
@@ -35,15 +37,19 @@ export class UserService {
           }
           return users;
         default:
-          return this.userModel.find();
+          return this.userModel
+            .find()
+            .populate(['bets', 'withdraw', 'withdraws']);
       }
     else {
-      return this.userModel.find();
+      return this.userModel.find().populate(['bets', 'withdraw', 'withdraws']);
     }
   }
 
   getOneUser(userId: string) {
-    return this.userModel.findById(userId).exec();
+    return this.userModel
+      .findById(userId)
+      .populate(['bets', 'withdraw', 'withdraws']);
   }
 
   async updateUser(userId: string, updateUserDto: UpdateUserDto) {
@@ -59,11 +65,15 @@ export class UserService {
   }
 
   async findOne(username: string) {
-    return this.userModel.findOne({ phone_number: username });
+    return this.userModel
+      .findOne({ phone_number: username })
+      .populate(['bets', 'withdraw', 'withdraws']);
   }
 
   async getUserHaveRecentBet() {
-    const users = await this.userModel.find();
+    const users = await this.userModel
+      .find()
+      .populate(['bets', 'withdraw', 'withdraws']);
 
     for (const user of users) {
       if (user.bets.length) {

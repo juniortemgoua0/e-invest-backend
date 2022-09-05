@@ -1,5 +1,5 @@
-import {User} from "../../user/types/user.interface";
-
+import { User } from '../../user/types/user.interface';
+import { Prop } from '@nestjs/mongoose';
 
 export interface Bet {
   id: string;
@@ -12,6 +12,12 @@ export interface Bet {
 
   retained_amount: number;
 
+  withdraw_amount: number;
+
+  is_validate: boolean;
+
+  is_in_withdraw: boolean;
+
   activeDuration: number;
 
   start_of_bet: Date;
@@ -21,5 +27,4 @@ export interface Bet {
   status: number;
 
   payment_reference: number;
-
 }

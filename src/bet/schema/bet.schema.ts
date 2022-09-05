@@ -23,6 +23,9 @@ export class Bet {
   @Prop({ required: false, default: 0 })
   active_duration: number;
 
+  @Prop({ required: false, default: 0 })
+  withdraw_amount: number;
+
   @Prop({ required: true, default: new Date() })
   start_of_bet: Date;
 
@@ -34,6 +37,12 @@ export class Bet {
 
   @Prop({ required: true })
   payment_reference: string;
+
+  @Prop({ required: false })
+  is_validate: boolean;
+
+  @Prop({ required: true, default: false })
+  is_in_withdraw: boolean;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: ModelName.USER })
   user: User;

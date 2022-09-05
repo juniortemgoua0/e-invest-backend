@@ -8,6 +8,7 @@ import { BetModule } from './bet/bet.module';
 import { PaymentModule } from './payment/payment.module';
 import { SettingModule } from './setting/setting.module';
 import { AdminModule } from './admin/admin.module';
+import { WithdrawModule } from './withdraw/withdraw.module';
 
 @Global()
 @Module({
@@ -32,6 +33,7 @@ import { AdminModule } from './admin/admin.module';
     PaymentModule,
     SettingModule,
     AdminModule,
+    WithdrawModule,
   ],
   exports: [ConfigModule],
   controllers: [AppController],
