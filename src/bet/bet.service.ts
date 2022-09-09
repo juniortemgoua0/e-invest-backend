@@ -85,11 +85,15 @@ export class BetService {
     for (const col of collections) {
       foundCollections.push((await col.populate(['user']))['_doc']);
     }
+    const totalItems: number = (await this.betModel.find()).length;
 
     if (status !== undefined)
       switch (status) {
         case GetUsersStatus.ALL:
-          return foundCollections;
+          return {
+            data: foundCollections,
+            pagination: { pageIndex, pageSize, totalItems },
+          };
         case GetUsersStatus.IN_LINE:
           let users = [];
           users = await this.betModel

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Put,
   Query,
 } from '@nestjs/common';
@@ -15,9 +16,13 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('')
-  getAllUsers(@Query('status') status: string) {
+  getAllUsers(
+    @Query('status') status: string,
+    @Query('pageIndex', ParseIntPipe) pageIndex: number,
+    @Query('pageSize', ParseIntPipe) pageSize: number,
+  ) {
     console.log(status);
-    return this.userService.getAllUsers(status);
+    return this.userService.getAllUsers(status, pageIndex, pageSize);
   }
 
   @Get('usersHaveBet')

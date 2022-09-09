@@ -181,10 +181,15 @@ export class WithdrawService {
       foundWithdraws.push((await withdraw.populate(['user']))['_doc']);
     }
 
+    const totalItems: number = (await this.withdrawModel.find()).length;
+
     if (status !== undefined)
       switch (status) {
         case GetUsersStatus.ALL:
-          return foundWithdraws;
+          return {
+            data: foundWithdraws,
+            pagination: { pageIndex, pageSize, totalItems },
+          };
         case GetUsersStatus.IN_LINE:
           let users = [];
           users = await this.withdrawModel

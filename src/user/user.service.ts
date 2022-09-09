@@ -13,11 +13,31 @@ export class UserService {
     private readonly userModel: Model<UserDocument>,
   ) {}
 
-  async getAllUsers(status: string) {
+  async getAllUsers(status: string, pageIndex: number, pageSize: number) {
+    const skip = pageSize * ((pageIndex || 1) - 1);
+    const limit = pageSize || 25;
+    const foundUsers = [];
+
+    const users = await this.userModel
+      .find()
+      .skip(skip)
+      .limit(limit)
+      .sort('-createdAt');
+    for (const user of users) {
+      foundUsers.push(
+        (await user.populate(['bets', 'withdraw', 'withdraws']))['_doc'],
+      );
+    }
+
+    const totalItems: number = (await this.userModel.find()).length;
+
     if (status !== undefined)
       switch (status) {
         case GetUsersStatus.ALL:
-          return this.userModel.find();
+          return {
+            data: foundUsers,
+            pagination: { pageIndex, pageSize, totalItems },
+          };
         case GetUsersStatus.IN_LINE:
           let users = [];
 
