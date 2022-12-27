@@ -188,7 +188,7 @@ export class WithdrawService {
         case GetUsersStatus.ALL:
           return {
             data: foundWithdraws,
-            pagination: { pageIndex, pageSize, totalItems },
+            pagination: { index: pageIndex, size: pageSize, total: totalItems },
           };
         case GetUsersStatus.IN_LINE:
           let users = [];
