@@ -36,7 +36,8 @@ export class BetService {
   async findCurrentBet(userId): Promise<Bet | null> {
     const currentBet = await this.betModel
       .findOne({ user: userId })
-      .where({ status: BetStatus.IN_PROGRESS });
+      .where({ status: BetStatus.IN_PROGRESS })
+      .sort('-createdAt');
     if (!currentBet) {
       console.log('currentBet => ', currentBet);
       throw new HttpException(
