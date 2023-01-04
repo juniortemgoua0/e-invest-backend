@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CheckUsernameDto, SignUpDto } from './dto';
+import { CheckUsernameDto, CreateOtpDto, SignUpDto, VerifyOtpDto } from './dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument } from '../user/user.schema';
@@ -7,13 +7,16 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ModelName, Role } from '../helpers';
+import { Twilio } from 'twilio';
+import * as OtpGenerator from 'otp-generator';
+import { Request as RequestExpress, Response } from 'express';
 
 export enum UserStatusType {
   USER = 'user',
   STUDENT = 'student',
   PERSONNEL = 'personnel',
 }
-
+const phoneRegex = /^6(?=[579])([0-9]{8})/;
 @Injectable()
 export class AuthService {
   constructor(
@@ -83,5 +86,55 @@ export class AuthService {
       }
     }
     return null;
+  }
+
+  async createOtp(createOtpDto: CreateOtpDto, res: Response): Promise<any> {
+    if (!createOtpDto.phoneNumber.match(phoneRegex)) {
+      throw new HttpException(
+        'Numéro de téléphone invalide fourni',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
+
+    const client = new Twilio(
+      'ACb788070ee1bb4f33a57a09f48813bced',
+      'bff3e34980d9f799fa87401edfd06565',
+    );
+
+    const otp = OtpGenerator.generate(6, {
+      lowerCaseAlphabets: false,
+      upperCaseAlphabets: false,
+      specialChars: false,
+    });
+    res.cookie('OTP', otp, {
+      maxAge: 5 * 60 * 1000,
+    });
+
+    const result = await client.messages.create({
+      from: '+16692793450',
+      to: `+237${createOtpDto.phoneNumber}`,
+      body: `Renseigner le code suivant pour verifier votre numéro de téléphone : ${otp}`,
+    });
+
+    return res.send(result);
+  }
+
+  verifyOtp(verifyOtpDto: VerifyOtpDto, req: RequestExpress) {
+    const otp = req.cookies['OTP'];
+    if (!otp) {
+      throw new HttpException(
+        'Le délai de validité a expiré',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    console.log(otp, verifyOtpDto.otp);
+    if (otp !== verifyOtpDto.otp.toString()) {
+      throw new HttpException('Otp invalide', HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    return {
+      otp: otp,
+      message: 'success',
+    };
   }
 }

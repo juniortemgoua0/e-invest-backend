@@ -65,12 +65,9 @@ export class BetController {
     return this.betService.findCurrentBet(userId);
   }
 
-  @Put(':userId')
-  updateBet(
-    @Param('userId') userId: string,
-    @Body() updateBetDto: UpdateBetDto,
-  ) {
-    return this.betService.update(userId, updateBetDto);
+  @Put(':betId')
+  updateBet(@Param('betId') betId: string, @Body() updateBetDto: UpdateBetDto) {
+    return this.betService.update(betId, updateBetDto);
   }
 
   @Delete(':id')

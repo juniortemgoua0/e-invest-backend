@@ -35,22 +35,22 @@ export class BetService {
 
   async findCurrentBet(userId): Promise<Bet | null> {
     const currentBet = await this.betModel
-      .findOne({ user: userId })
-      .where({ status: BetStatus.IN_PROGRESS })
-      .sort('-createdAt');
-    if (!currentBet) {
-      console.log('currentBet => ', currentBet);
+      .find({ user: userId, status: BetStatus.IN_PROGRESS })
+      .sort('-createdAt')
+      .limit(1);
+
+    if (!currentBet[0]) {
       throw new HttpException(
         "Vous n'avez pas de mise en cours",
         HttpStatus.UNAUTHORIZED,
       );
     }
-    return currentBet;
+    return (await currentBet[0].populate(['user']))['_doc'];
   }
 
-  update(userId: string, updateBetDto: UpdateBetDto) {
+  update(betId: string, updateBetDto: UpdateBetDto) {
     return this.betModel.findByIdAndUpdate(
-      userId,
+      betId,
       { $set: { ...updateBetDto } },
       { new: true, upsert: true },
     );
