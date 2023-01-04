@@ -10,6 +10,7 @@ import { ModelName, Role } from '../helpers';
 import { Twilio } from 'twilio';
 import * as OtpGenerator from 'otp-generator';
 import { Request as RequestExpress, Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 export enum UserStatusType {
   USER = 'user',
@@ -24,6 +25,7 @@ export class AuthService {
     private readonly userModel: Model<UserDocument>,
     private userService: UserService,
     private jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
@@ -97,8 +99,8 @@ export class AuthService {
     }
 
     const client = new Twilio(
-      'ACb788070ee1bb4f33a57a09f48813bced',
-      'bff3e34980d9f799fa87401edfd06565',
+      this.configService.get<string>('TWILO_USERNAME'),
+      this.configService.get<string>('TWILO_PASSWORD'),
     );
 
     const otp = OtpGenerator.generate(6, {
@@ -115,7 +117,6 @@ export class AuthService {
       to: `+237${createOtpDto.phoneNumber}`,
       body: `Renseigner le code suivant pour verifier votre numéro de téléphone : ${otp}`,
     });
-
     return res.send(result);
   }
 
