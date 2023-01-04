@@ -110,6 +110,8 @@ export class AuthService {
     });
     res.cookie('OTP', otp, {
       maxAge: 5 * 60 * 1000,
+      httpOnly: false,
+      secure: false,
     });
 
     const result = await client.messages.create({
