@@ -112,6 +112,7 @@ export class AuthService {
       maxAge: 5 * 60 * 1000,
       httpOnly: false,
       secure: false,
+      domain: 'http://localhost:3000',
     });
 
     const result = await client.messages.create({

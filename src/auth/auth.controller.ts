@@ -37,6 +37,7 @@ export class AuthController {
   verifyOtp(@Body() verifyOtpDto: VerifyOtpDto, @Req() req: RequestExpress) {
     console.log(verifyOtpDto);
     console.log(req.cookies);
+    console.log(req.headers);
     return this.authService.verifyOtp(verifyOtpDto, req);
   }
 }
