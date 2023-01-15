@@ -13,7 +13,8 @@ async function bootstrap() {
   const PORT = configService.get<string>('PORT');
 
   app.enableCors({
-    origin: '*',
+    origin: ['*', 'http://localhost:3000', 'http://172.20.10.3:3000'],
+    credentials: true,
   });
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));

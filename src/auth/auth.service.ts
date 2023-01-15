@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CheckUsernameDto, CreateOtpDto, SignUpDto, VerifyOtpDto } from './dto';
+import { CreateOtpDto, SignUpDto, VerifyOtpDto } from './dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument } from '../user/user.schema';
@@ -112,7 +112,6 @@ export class AuthService {
       maxAge: 5 * 60 * 1000,
       httpOnly: false,
       secure: false,
-      domain: 'http://localhost:3000',
     });
 
     const result = await client.messages.create({
