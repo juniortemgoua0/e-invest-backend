@@ -5,17 +5,20 @@ export type SettingDocument = Setting & Document;
 
 @Schema()
 export class Setting {
-  @Prop({ required: true, default: 7 })
-  debit: number;
-
   @Prop({ required: true, default: 3 })
   factor: number;
 
-  @Prop({ required: true, default: 4 })
-  ascTime: number;
-
   @Prop({ required: true, default: 3 })
-  descTime: number;
+  timeOfBet: number;
+
+  // @Prop({ required: true, default: 3 })
+  // otpSave:;
+
+  // @Prop({ required: true, default: 4 })
+  // ascTime: number;
+  //
+  // @Prop({ required: true, default: 3 })
+  // descTime: number;
 }
 
 export const SettingSchema = SchemaFactory.createForClass(Setting);

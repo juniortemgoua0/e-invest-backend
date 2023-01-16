@@ -33,4 +33,15 @@ export class WithdrawController {
   ) {
     return this.withdrawService.getWithdraw(pageIndex, pageSize, status);
   }
+
+  @Get(':userId')
+  getUserWithdraw(
+    @Query('pageIndex', ParseIntPipe) pageIndex: number,
+    @Query('pageSize', ParseIntPipe) pageSize: number,
+    @Query('status') status: string,
+    @Param('userId') userId: string,
+  ) {
+    console.log(pageIndex, pageSize);
+    return this.withdrawService.getUserWithdraw(pageIndex, pageSize, userId);
+  }
 }

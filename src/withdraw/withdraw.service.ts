@@ -111,42 +111,42 @@ export class WithdrawService {
       );
     }
 
-    const bets: Bet[] = await this.betModel.find({ user: userId });
+    // const bets: Bet[] = await this.betModel.find({ user: userId });
 
-    let remain = withdraw_amount;
-    let i = 0;
-    while (remain > 0) {
-      const currentBet = bets[i];
-      if (currentBet.available_amount > 0) {
-        if (currentBet.available_amount < remain) {
-          await this.betModel.findByIdAndUpdate(
-            currentBet.id,
-            {
-              $set: {
-                available_amount: 0,
-                is_in_withdraw: false,
-              },
-            },
-            { new: true, upsert: true },
-          );
-          remain -= currentBet.available_amount;
-        } else {
-          await this.betModel.findByIdAndUpdate(
-            currentBet.id,
-            {
-              $set: {
-                available_amount:
-                  currentBet.available_amount - currentBet.withdraw_amount,
-                is_in_withdraw: false,
-              },
-            },
-            { new: true, upsert: true },
-          );
-          remain = 0;
-        }
-      }
-      i++;
-    }
+    // let remain = withdraw_amount;
+    // let i = 0;
+    // while (remain > 0) {
+    //   const currentBet = bets[i];
+    //   if (currentBet.available_amount > 0) {
+    //     if (currentBet.available_amount < remain) {
+    //       await this.betModel.findByIdAndUpdate(
+    //         currentBet.id,
+    //         {
+    //           $set: {
+    //             available_amount: 0,
+    //             is_in_withdraw: false,
+    //           },
+    //         },
+    //         { new: true, upsert: true },
+    //       );
+    //       remain -= currentBet.available_amount;
+    //     } else {
+    //       await this.betModel.findByIdAndUpdate(
+    //         currentBet.id,
+    //         {
+    //           $set: {
+    //             available_amount:
+    //               currentBet.available_amount - currentBet.withdraw_amount,
+    //             is_in_withdraw: false,
+    //           },
+    //         },
+    //         { new: true, upsert: true },
+    //       );
+    //       remain = 0;
+    //     }
+    //   }
+    //   i++;
+    // }
 
     await this.userModel.findByIdAndUpdate(
       userId,
@@ -203,5 +203,16 @@ export class WithdrawService {
     else {
       return this.withdrawModel.find().populate(['user']);
     }
+  }
+
+  async getUserWithdraw(pageIndex, pageSize, userId) {
+    const skip = pageSize * ((pageIndex || 1) - 1);
+    const limit = pageSize || 25;
+    return this.withdrawModel
+      .find({ user: userId })
+      .skip(skip)
+      .limit(limit)
+      .sort('-createdAt')
+      .populate(['user']);
   }
 }

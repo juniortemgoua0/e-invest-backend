@@ -13,7 +13,12 @@ async function bootstrap() {
   const PORT = configService.get<string>('PORT');
 
   app.enableCors({
-    origin: ['*', 'http://localhost:3000', 'http://172.20.10.3:3000'],
+    origin: [
+      '*',
+      'http://localhost:3000',
+      'http://172.20.10.3:3000',
+      'https://betcach-betcach-pwa-reactjs.vercel.app',
+    ],
     credentials: true,
   });
   app.use(bodyParser.json({ limit: '50mb' }));
