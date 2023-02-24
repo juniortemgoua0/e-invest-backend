@@ -2,14 +2,14 @@ import { IsNumber } from 'class-validator';
 
 export class UpdateSettingDto {
   @IsNumber()
-  debit: number;
+  timeOfBet: number;
 
   @IsNumber()
   factor: number;
 
-  @IsNumber()
-  descTime: number;
+  // @IsNumber()
+  // descTime: number;
 
-  @IsNumber()
-  ascTime: number;
+  // @IsNumber()
+  // ascTime: number;
 }

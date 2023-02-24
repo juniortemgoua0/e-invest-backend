@@ -35,6 +35,11 @@ export class BetController {
     return this.betService.getBets(pageIndex, pageSize, status);
   }
 
+  @Get('info/:userId')
+  getUserBetInfor(@Param('userId') userId: string) {
+    return this.betService.getUserBetInfor(userId);
+  }
+
   @Get('totalItems')
   getTotalBetItems() {
     return this.betService.getTotalBetItems();

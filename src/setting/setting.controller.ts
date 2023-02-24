@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Put } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put, Get } from '@nestjs/common';
 import { SettingService } from './setting.service';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 
@@ -6,11 +6,18 @@ import { UpdateSettingDto } from './dto/update-setting.dto';
 export class SettingController {
   constructor(private settingService: SettingService) {}
 
-  @Put('settingId')
-  updateSetting(
-    @Param('settingId') settingId: string,
-    @Body() updateSettingDto: UpdateSettingDto,
-  ) {
-    return this.settingService.updateSetting(settingId, updateSettingDto);
+  @Get()
+  getSetting() {
+    return this.settingService.getSetting();
+  }
+
+  @Post()
+  createSetting(@Body() createSettingDto: UpdateSettingDto) {
+    return this.settingService.createSetting(createSettingDto);
+  }
+
+  @Put()
+  updateSetting(@Body() updateSettingDto: UpdateSettingDto) {
+    return this.settingService.updateSetting(updateSettingDto);
   }
 }

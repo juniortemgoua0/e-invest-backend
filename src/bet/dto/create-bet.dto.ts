@@ -5,13 +5,13 @@ export class CreateBetDto {
   @IsNotEmpty()
   bet_amount: number;
 
-  balance_amount: number;
+  balance_amount?: number;
 
-  available_amount: number;
+  available_amount?: number;
 
-  retained_amount: number;
+  retained_amount?: number;
 
-  active_duration: number;
+  active_duration?: number;
 
   @IsString()
   payment_reference: string;

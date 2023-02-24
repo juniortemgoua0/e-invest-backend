@@ -40,6 +40,9 @@ export class UserController {
     @Param(':userId') userId: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
+    console.log('=============UserId=======================');
+    console.log(userId);
+    console.log('====================================');
     return this.userService.updateUser(userId, updateUserDto);
   }
 

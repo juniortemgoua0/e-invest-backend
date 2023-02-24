@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalPipes(new ValidationPipe());
 
   const configService = app.get(ConfigService);
@@ -16,13 +17,16 @@ async function bootstrap() {
     origin: [
       '*',
       'http://localhost:3000',
-      'http://172.20.10.3:3000',
       'https://betcach-betcach-pwa-reactjs.vercel.app',
+      'http://172.20.10.2:3000',
     ],
     credentials: true,
   });
+
   app.use(bodyParser.json({ limit: '50mb' }));
+
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
   app.use(cookieParser());
 
   await app.listen(PORT || 3000);

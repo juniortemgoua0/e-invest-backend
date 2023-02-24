@@ -1,3 +1,4 @@
+import { SettingDocument } from './../setting/schema/setting.schema';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateBetDto } from './dto/create-bet.dto';
 import { UpdateBetDto } from './dto/update-bet.dto';
@@ -14,13 +15,26 @@ import { UserDocument } from '../user/user.schema';
 export class BetService {
   constructor(
     @InjectModel(ModelName.BET) private readonly betModel: Model<BetDocument>,
+    @InjectModel(ModelName.SETTING)
+    private readonly settingModel: Model<SettingDocument>,
     @InjectModel(ModelName.USER)
     private readonly userModel: Model<UserDocument>,
   ) {}
 
   async create(userId: string, createBetDto: CreateBetDto): Promise<Bet> {
-    const newBet = new this.betModel({
+    const setting = (await this.settingModel.find())[0];
+    const bet = {
       ...createBetDto,
+      balance_amount: createBetDto.bet_amount * setting.factor,
+      available_amount: createBetDto.bet_amount * setting.factor * 0.75,
+      retained_amount: createBetDto.bet_amount * setting.factor * 0.25,
+      active_duration: setting.timeOfBet,
+      payment_reference: 'uiu234ewrdsffsde',
+      factor: setting.factor,
+    };
+
+    const newBet = new this.betModel({
+      ...bet,
       user: userId,
     });
 
@@ -161,5 +175,17 @@ export class BetService {
     }
     total.gains = total.available - total.bet;
     return total;
+  }
+
+  async getUserBetInfor(userId: string) {
+    const bets = await this.betModel.find({ user: userId });
+    const user = await this.userModel.findById(userId);
+    const totals = await this.getAllTotalOfBetOfUser(userId);
+    return {
+      ...totals,
+      lastBet: bets[bets.length - 1],
+      totalBets: bets.length,
+      username: user.first_name,
+    };
   }
 }

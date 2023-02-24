@@ -9,6 +9,7 @@ import { PaymentModule } from './payment/payment.module';
 import { SettingModule } from './setting/setting.module';
 import { AdminModule } from './admin/admin.module';
 import { WithdrawModule } from './withdraw/withdraw.module';
+import { SearchModule } from './search/search.module';
 
 @Global()
 @Module({
@@ -34,6 +35,7 @@ import { WithdrawModule } from './withdraw/withdraw.module';
     SettingModule,
     AdminModule,
     WithdrawModule,
+    SearchModule,
   ],
   exports: [ConfigModule],
   controllers: [AppController],

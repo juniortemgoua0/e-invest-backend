@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsString} from "class-validator";
+import { IsEmpty, IsNotEmpty, IsString } from 'class-validator';
 
 export class UpdateUserDto {
   @IsNotEmpty()
@@ -17,14 +17,15 @@ export class UpdateUserDto {
   @IsString()
   phone_number: string;
 
-  @IsNotEmpty()
-  @IsString()
+  @IsEmpty()
+  // @IsString()
   password: string;
 
-  @IsNotEmpty()
-  @IsString()
+  @IsEmpty()
+  // @IsString()
   confirm_password: string;
 
-  @IsString()
+  @IsEmpty()
+  // @IsString()
   qr_code: string;
 }

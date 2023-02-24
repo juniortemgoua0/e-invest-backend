@@ -5,10 +5,10 @@ export type SettingDocument = Setting & Document;
 
 @Schema()
 export class Setting {
-  @Prop({ required: true, default: 3 })
+  @Prop({ required: true })
   factor: number;
 
-  @Prop({ required: true, default: 3 })
+  @Prop({ required: true })
   timeOfBet: number;
 
   // @Prop({ required: true, default: 3 })

@@ -12,9 +12,22 @@ export class SettingService {
     private readonly settingModel: Model<SettingDocument>,
   ) {}
 
-  async updateSetting(settingId: string, updateSettingDto: UpdateSettingDto) {
+  async createSetting(createSettingDto: UpdateSettingDto) {
+    const setting = new this.settingModel({
+      ...createSettingDto,
+    });
+
+    return setting.save();
+  }
+
+  async getSetting() {
+    return (await this.settingModel.find())[0];
+  }
+
+  async updateSetting(updateSettingDto: UpdateSettingDto) {
+    const settings = await this.settingModel.find();
     return this.settingModel.findByIdAndUpdate(
-      settingId,
+      settings[0]._id,
       { $set: { ...updateSettingDto } },
       { new: true, upsert: true },
     );

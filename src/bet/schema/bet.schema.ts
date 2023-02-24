@@ -24,6 +24,9 @@ export class Bet {
   active_duration: number;
 
   @Prop({ required: false, default: 0 })
+  factor: number;
+
+  @Prop({ required: false, default: 0 })
   withdraw_amount: number;
 
   @Prop({ required: true, default: new Date() })

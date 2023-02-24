@@ -73,11 +73,18 @@ export class UserService {
   }
 
   async updateUser(userId: string, updateUserDto: UpdateUserDto) {
-    return this.userModel.findByIdAndUpdate(
+    console.log('====================================');
+    console.log(userId);
+    console.log('====================================');
+    const updateUser = await this.userModel.findByIdAndUpdate(
       userId,
       { $set: { ...updateUserDto } },
       { new: true, upsert: true },
     );
+    console.log('====================================');
+    console.log(updateUser);
+    console.log('====================================');
+    return updateUser;
   }
 
   deleteUser(userId: string) {
